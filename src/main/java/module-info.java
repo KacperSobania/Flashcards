@@ -5,4 +5,6 @@ module com.flashcards.flashcards {
 
     opens com.flashcards to javafx.fxml;
     exports com.flashcards;
+    exports com.flashcards.scenes.controllers.main;
+    opens com.flashcards.scenes.controllers.main to javafx.fxml;
 }
