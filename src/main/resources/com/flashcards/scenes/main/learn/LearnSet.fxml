@@ -22,12 +22,12 @@
             <Font size="22.0" />
          </font>
       </Button>
-      <Button fx:id="nextButton" layoutX="460.0" layoutY="460.0" mnemonicParsing="false" onAction="#clickNext" prefHeight="50.0" prefWidth="150.0" text="Next">
+      <Button fx:id="nextButton" layoutX="460.0" layoutY="460.0" mnemonicParsing="false" onAction="#clickNext" prefHeight="50.0" prefWidth="150.0" text="Next" visible="false">
          <font>
             <Font size="22.0" />
          </font>
       </Button>
-      <Label fx:id="cardLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="150.0" layoutY="100.0" onMouseClicked="#clickCard" prefHeight="300.0" prefWidth="500.0" text="Definition" textAlignment="CENTER">
+      <Label fx:id="cardLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="150.0" layoutY="100.0" onMouseClicked="#clickCard" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: #dbdbdb;" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="22.0" />
          </font>
