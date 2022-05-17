@@ -175,6 +175,17 @@ public final class DatabaseConnection {
     }
 
     public void updateTitleOfSet(int indexOfSet, String newTitleOfSet){
+
+        String renameTable = "ALTER TABLE \"" + getTitleOfSet(indexOfSet) + "\" RENAME TO \"" + newTitleOfSet + "\"";
+        try(Connection connection = connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(renameTable)){
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exception){
+            System.out.println(exception.getMessage());
+        }
+
         String query = "UPDATE \"Titles of sets\" SET Title = ? WHERE rowid = ?";
         try(Connection connection = connect();
             PreparedStatement preparedStatement = connection.prepareStatement(query)){
@@ -185,6 +196,7 @@ public final class DatabaseConnection {
         } catch(SQLException exception){
             System.out.println(exception.getMessage());
         }
+
     }
 
     public void updateDefinition(int indexOfSet, int indexOfCard, String newDefinition){

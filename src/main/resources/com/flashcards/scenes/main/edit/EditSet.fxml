@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.flashcards.scenes.main.edit.EditSet"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.flashcards.scenes.controllers.main.edit.EditSet">
+   <content>
+      <VBox fx:id="vBox" alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="796.0">
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <children>
+            <Label alignment="BOTTOM_LEFT" prefHeight="65.0" prefWidth="500.0" text="Title">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <TextField fx:id="titleTextField" prefHeight="45.0" prefWidth="500.0">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </TextField>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>
