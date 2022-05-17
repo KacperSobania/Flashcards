@@ -29,6 +29,7 @@ public class AddNewSet {
     List<TextField> answerTextField = new ArrayList<>();
 
     Button addCardButton = new Button();
+    Button deleteCardButton = new Button();
     Button submitButton = new Button();
     Button backToMenuButton = new Button();
 
@@ -39,13 +40,17 @@ public class AddNewSet {
         addCardButton.setFont(new Font(25));
         addCardButton.setText("+");
         addCardButton.setAlignment(Pos.CENTER);
-        addCardButton.setMinSize(80, 60);
-        VBox.setMargin(addCardButton, new Insets(30,0,0,0));
+        addCardButton.setMinSize(80, 50);
+        VBox.setMargin(addCardButton, new Insets(20,0,0,0));
         addCardButton.setOnAction(actionEvent -> {
+            if(definitionTextField.size() > 1){
+                vBox.getChildren().remove(deleteCardButton);
+            }
             vBox.getChildren().remove(addCardButton);
             vBox.getChildren().remove(submitButton);
             vBox.getChildren().remove(backToMenuButton);
             addNewCard();
+            vBox.getChildren().add(deleteCardButton);
             addFinalComponents(); //add, submit and back button
         });
 
@@ -91,7 +96,31 @@ public class AddNewSet {
             stage.show();
         });
 
-        addFinalComponents(); //add, submit and back button
+        deleteCardButton.setFont(new Font(25));
+        deleteCardButton.setText("-");
+        deleteCardButton.setAlignment(Pos.CENTER);
+        deleteCardButton.setMinSize(80, 50);
+        VBox.setMargin(deleteCardButton, new Insets(20,0,0,0));
+        deleteCardButton.setOnAction(actionEvent -> {
+            vBox.getChildren().remove(deleteCardButton);
+            vBox.getChildren().remove(addCardButton);
+            vBox.getChildren().remove(submitButton);
+            vBox.getChildren().remove(backToMenuButton);
+
+            vBox.getChildren().remove(answerTextField.get(answerTextField.size() - 1));
+            answerTextField.remove(answerTextField.get(answerTextField.size() - 1));
+            vBox.getChildren().remove(vBox.getChildren().size() - 1);
+            vBox.getChildren().remove(definitionTextField.get(definitionTextField.size() - 1));
+            definitionTextField.remove(definitionTextField.get(definitionTextField.size() - 1));
+            vBox.getChildren().remove(vBox.getChildren().size() - 1);
+
+            if(definitionTextField.size() > 1){
+                vBox.getChildren().add(deleteCardButton);
+            }
+            addFinalComponents();
+        });
+
+        addFinalComponents();
     }
 
     private void addNewCard(){
