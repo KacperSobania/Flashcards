@@ -1,6 +1,7 @@
 module com.flashcards.flashcards {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens com.flashcards to javafx.fxml;

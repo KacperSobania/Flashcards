@@ -1,5 +1,6 @@
 package com.flashcards.scenes.controllers.main.add;
 
+import com.flashcards.scenes.controllers.main.database.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -31,6 +32,8 @@ public class AddNewSet {
     Button submitButton = new Button();
     Button backToMenuButton = new Button();
 
+    DatabaseConnection setsManager = DatabaseConnection.getSetsManager();
+
     public void initialize(){
         addNewCard();
 
@@ -53,6 +56,12 @@ public class AddNewSet {
         submitButton.setMinSize(150, 60);
         VBox.setMargin(submitButton, new Insets(30,0,0,0));
         submitButton.setOnAction(actionEvent -> {
+
+            setsManager.addTitleOfSet(titleTextField.getText());
+            for(int i = 0; i < this.definitionTextField.size(); i++){
+                setsManager.addCard(this.definitionTextField.get(i).getText(), this.answerTextField.get(i).getText(), setsManager.getNumberOfSets());
+            }
+
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/MainMenu.fxml"));
             Scene scene = null;
             try {
