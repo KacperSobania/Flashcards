@@ -5,11 +5,13 @@ import java.sql.*;
 public final class DatabaseConnection {
 
     private static DatabaseConnection setsManager;
+    public int indexOfChosenSet;
+
     private DatabaseConnection(){
         createDatabase();
     }
 
-    public static DatabaseConnection getSetsManager(){
+    public static DatabaseConnection getInstance(){
         if(setsManager == null){
             setsManager = new DatabaseConnection();
         }

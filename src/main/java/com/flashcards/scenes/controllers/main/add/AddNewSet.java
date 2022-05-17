@@ -32,11 +32,10 @@ public class AddNewSet {
     Button submitButton = new Button();
     Button backToMenuButton = new Button();
 
-    DatabaseConnection setsManager = DatabaseConnection.getSetsManager();
+    DatabaseConnection setsManager = DatabaseConnection.getInstance();
 
     public void initialize(){
         addNewCard();
-
         addCardButton.setFont(new Font(25));
         addCardButton.setText("+");
         addCardButton.setAlignment(Pos.CENTER);

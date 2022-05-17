@@ -1,5 +1,6 @@
 package com.flashcards.scenes.controllers.main;
 
+import com.flashcards.scenes.controllers.main.database.DatabaseConnection;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +28,8 @@ public class MainMenu {
 
     private Stage stage;
 
+    DatabaseConnection setsManager = DatabaseConnection.getInstance();
+
     public void clickAddNewSet(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/add/AddNewSet.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -36,19 +39,29 @@ public class MainMenu {
     }
 
     public void clickLearn(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/learn/ChooseSet.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        if(setsManager.getNumberOfSets() > 0) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/learn/ChooseSet.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        }
+        else{
+            warningLabel.setVisible(true);
+        }
     }
 
     public void clickEditSets(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/edit/ChooseSet.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        if(setsManager.getNumberOfSets() > 0) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/edit/ChooseSet.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        }
+        else{
+            warningLabel.setVisible(true);
+        }
     }
 
     public void clickExit(ActionEvent event){
