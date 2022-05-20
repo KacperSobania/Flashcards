@@ -67,28 +67,49 @@ public class EditSet {
         VBox.setMargin(saveChangesButton, new Insets(30,0,20,0));
         saveChangesButton.setOnAction(actionEvent -> {
 
-            if(!titleTextField.getText().equals(setsManager.getTitleOfSet(setsManager.indexOfChosenSet))){
-                setsManager.updateTitleOfSet(setsManager.indexOfChosenSet, titleTextField.getText());
+            boolean noEmptyFields = true;
+            if(titleTextField.getText().isBlank()){
+                noEmptyFields = false;
+                titleTextField.setText("");
+                titleTextField.setPromptText("This field can't be empty!");
             }
-            for(int i = 0; i < setsManager.getNumberOfCards(setsManager.indexOfChosenSet); i++){
-                if(!definitionTextField.get(i).getText().equals(setsManager.getCardDefinition(setsManager.indexOfChosenSet, i + 1))){
-                    setsManager.updateDefinition(setsManager.indexOfChosenSet, i + 1, definitionTextField.get(i).getText());
+            for(int i = 0; i < definitionTextField.size(); i++){
+                if(definitionTextField.get(i).getText().isBlank()){
+                    noEmptyFields = false;
+                    definitionTextField.get(i).setText("");
+                    definitionTextField.get(i).setPromptText("Fill this field!");
                 }
-                if(!answerTextField.get(i).getText().equals(setsManager.getCardAnswer(setsManager.indexOfChosenSet, i + 1))){
-                    setsManager.updateAnswer(setsManager.indexOfChosenSet, i + 1, answerTextField.get(i).getText());
+                if(answerTextField.get(i).getText().isBlank()){
+                    noEmptyFields = false;
+                    answerTextField.get(i).setText("");
+                    answerTextField.get(i).setPromptText("Fill this field!");
                 }
             }
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/MainMenu.fxml"));
-            Scene scene = null;
-            try {
-                scene = new Scene(fxmlLoader.load());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (noEmptyFields) {
+                if(!titleTextField.getText().equals(setsManager.getTitleOfSet(setsManager.indexOfChosenSet))){
+                    setsManager.updateTitleOfSet(setsManager.indexOfChosenSet, titleTextField.getText());
+                }
+                for(int i = 0; i < setsManager.getNumberOfCards(setsManager.indexOfChosenSet); i++){
+                    if(!definitionTextField.get(i).getText().equals(setsManager.getCardDefinition(setsManager.indexOfChosenSet, i + 1))){
+                        setsManager.updateDefinition(setsManager.indexOfChosenSet, i + 1, definitionTextField.get(i).getText());
+                    }
+                    if(!answerTextField.get(i).getText().equals(setsManager.getCardAnswer(setsManager.indexOfChosenSet, i + 1))){
+                        setsManager.updateAnswer(setsManager.indexOfChosenSet, i + 1, answerTextField.get(i).getText());
+                    }
+                }
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/MainMenu.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
             }
-            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
         });
         vBox.getChildren().add(saveChangesButton);
 
