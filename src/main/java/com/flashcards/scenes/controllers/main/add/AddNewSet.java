@@ -61,21 +61,42 @@ public class AddNewSet {
         VBox.setMargin(submitButton, new Insets(30,0,0,0));
         submitButton.setOnAction(actionEvent -> {
 
-            setsManager.addTitleOfSet(titleTextField.getText());
-            for(int i = 0; i < this.definitionTextField.size(); i++){
-                setsManager.addCard(this.definitionTextField.get(i).getText(), this.answerTextField.get(i).getText(), setsManager.getNumberOfSets());
+            boolean noEmptyFields = true;
+            if(titleTextField.getText().isBlank()){
+                noEmptyFields = false;
+                titleTextField.setText("");
+                titleTextField.setPromptText("This field can't be empty!");
+            }
+            for(int i = 0; i < definitionTextField.size(); i++){
+                if(definitionTextField.get(i).getText().isBlank()){
+                    noEmptyFields = false;
+                    definitionTextField.get(i).setText("");
+                    definitionTextField.get(i).setPromptText("Fill this field!");
+                }
+                if(answerTextField.get(i).getText().isBlank()){
+                    noEmptyFields = false;
+                    answerTextField.get(i).setText("");
+                    answerTextField.get(i).setPromptText("Fill this field!");
+                }
             }
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/MainMenu.fxml"));
-            Scene scene = null;
-            try {
-                scene = new Scene(fxmlLoader.load());
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (noEmptyFields) {
+                setsManager.addTitleOfSet(titleTextField.getText());
+                for(int i = 0; i < this.definitionTextField.size(); i++){
+                    setsManager.addCard(this.definitionTextField.get(i).getText(), this.answerTextField.get(i).getText(), setsManager.getNumberOfSets());
+                }
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/MainMenu.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
             }
-            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
         });
 
         backToMenuButton.setFont(new Font(20));
