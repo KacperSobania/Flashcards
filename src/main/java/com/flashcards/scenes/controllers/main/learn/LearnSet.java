@@ -1,6 +1,7 @@
 package com.flashcards.scenes.controllers.main.learn;
 
 import com.flashcards.scenes.controllers.main.database.DatabaseConnection;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,20 +29,23 @@ public class LearnSet {
     @FXML
     Button backButton;
 
-    DatabaseConnection setsManager = DatabaseConnection.getInstance();
+    final DatabaseConnection setsManager = DatabaseConnection.getInstance();
 
     private final List<Integer> indexesOfCards = drawOrderOfCards();
     private int indexOfCurrentCard = 1;
 
     public void initialize(){
+
         titleOfSetLabel.setText(setsManager.getTitleOfSet(setsManager.indexOfChosenSet));
         cardLabel.setText(setsManager.getCardDefinition(setsManager.indexOfChosenSet, indexesOfCards.get(0)));
+
         if(setsManager.getNumberOfCards(setsManager.indexOfChosenSet) > 1){
             nextButton.setVisible(true);
         }
     }
 
-    public void clickCard(){
+    public void clickCard(){ //change to answer when definition is visible or to definition when answer is visible
+
         if(cardLabel.getText().equals(setsManager.getCardDefinition(setsManager.indexOfChosenSet, indexesOfCards.get(indexOfCurrentCard - 1)))){
             cardLabel.setText(setsManager.getCardAnswer(setsManager.indexOfChosenSet, indexesOfCards.get(indexOfCurrentCard - 1)));
         }
@@ -50,7 +54,7 @@ public class LearnSet {
         }
     }
 
-    public void clickNext(){
+    public void clickNext(){ //show next card
         previousButton.setVisible(true);
         indexOfCurrentCard++;
         cardLabel.setText(setsManager.getCardDefinition(setsManager.indexOfChosenSet, indexesOfCards.get(indexOfCurrentCard-1)));
@@ -58,7 +62,7 @@ public class LearnSet {
             nextButton.setVisible(false);
     }
 
-    public void clickPrevious(){
+    public void clickPrevious(){ //show previous card
         nextButton.setVisible(true);
         indexOfCurrentCard--;
         cardLabel.setText(setsManager.getCardDefinition(setsManager.indexOfChosenSet, indexesOfCards.get(indexOfCurrentCard-1)));
@@ -67,9 +71,14 @@ public class LearnSet {
         }
     }
 
-    public void clickBack(ActionEvent event) throws IOException {
+    public void clickBack(ActionEvent event) { //back to previous scene
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/learn/ChooseSet.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            Platform.exit();
+        }
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();

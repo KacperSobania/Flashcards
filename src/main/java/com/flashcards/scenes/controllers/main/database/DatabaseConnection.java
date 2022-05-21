@@ -1,11 +1,14 @@
 package com.flashcards.scenes.controllers.main.database;
 
+import javafx.application.Platform;
+
 import java.sql.*;
 
+//Singleton
 public final class DatabaseConnection {
 
     private static DatabaseConnection setsManager;
-    public int indexOfChosenSet;
+    public int indexOfChosenSet; //variable used to identify which set was chosen to edit or learn
 
     private DatabaseConnection(){
         createDatabase();
@@ -233,7 +236,7 @@ public final class DatabaseConnection {
         try{
             connection = DriverManager.getConnection(url);
         } catch (SQLException exception){
-            System.out.println(exception.getMessage());
+            Platform.exit();
         }
         return connection;
     }

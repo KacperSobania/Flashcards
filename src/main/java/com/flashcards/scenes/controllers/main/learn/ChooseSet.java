@@ -1,6 +1,7 @@
 package com.flashcards.scenes.controllers.main.learn;
 
 import com.flashcards.scenes.controllers.main.database.DatabaseConnection;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -17,9 +18,10 @@ public class ChooseSet {
     @FXML
     VBox vBox;
 
-    DatabaseConnection setsManager = DatabaseConnection.getInstance();
+    final DatabaseConnection setsManager = DatabaseConnection.getInstance();
 
     public void initialize(){
+        //add all sets to VBox
         for(int i = 1; i <= setsManager.getNumberOfSets(); i++){
             Button titleButton = new Button();
             titleButton.setMinSize(600, 70);
@@ -34,7 +36,7 @@ public class ChooseSet {
                 try {
                     scene = new Scene(fxmlLoader.load());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Platform.exit();
                 }
                 Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
                 stage.setScene(scene);
@@ -42,17 +44,20 @@ public class ChooseSet {
             });
             vBox.getChildren().add(titleButton);
         }
+
+        //Button properties
         Button backToMenuButton = new Button();
         backToMenuButton.setMinSize(300,60);
         backToMenuButton.setFont(new Font(20));
         backToMenuButton.setText("Back to menu");
+
         backToMenuButton.setOnAction(actionEvent -> {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/MainMenu.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load());
             } catch (IOException e) {
-                e.printStackTrace();
+                Platform.exit();
             }
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             stage.setScene(scene);

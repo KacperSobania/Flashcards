@@ -1,6 +1,7 @@
 package com.flashcards.scenes.controllers.main.edit;
 
 import com.flashcards.scenes.controllers.main.database.DatabaseConnection;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -25,24 +26,71 @@ public class EditSet {
     @FXML
     TextField titleTextField;
 
-    List<TextField> definitionTextField = new ArrayList<>();
-    List<TextField> answerTextField = new ArrayList<>();
+    final List<TextField> definitionTextField = new ArrayList<>();
+    final List<TextField> answerTextField = new ArrayList<>();
 
-    Button deleteSetButton = new Button();
-    Button saveChangesButton = new Button();
-    Button backButton = new Button();
+    final Button deleteSetButton = createDeleteSetButton();
+    final Button saveChangesButton = createSaveChangesButton();
+    final Button backButton = createBackButton();
 
-    DatabaseConnection setsManager = DatabaseConnection.getInstance();
+    final DatabaseConnection setsManager = DatabaseConnection.getInstance();
 
     public void initialize(){
+
         titleTextField.setText(setsManager.getTitleOfSet(setsManager.indexOfChosenSet));
         listCardDefinitionsAndAnswers();
+
+        vBox.getChildren().add(deleteSetButton);
+        vBox.getChildren().add(saveChangesButton);
+        vBox.getChildren().add(backButton);
+    }
+
+    private void listCardDefinitionsAndAnswers(){
+
+        for(int i = 1; i <= setsManager.getNumberOfCards(setsManager.indexOfChosenSet); i++) {
+
+            Label definitionLabel = new Label();
+            TextField definitionTextField = new TextField();
+            Label answerLabel = new Label();
+            TextField answerTextField = new TextField();
+
+            this.definitionTextField.add(definitionTextField);
+            this.answerTextField.add(answerTextField);
+
+            definitionLabel.setPrefSize(500, 60);
+            answerLabel.setPrefSize(500, 60);
+            definitionTextField.setPrefSize(500, 60);
+            answerTextField.setPrefSize(500, 60);
+
+            definitionLabel.setText(this.definitionTextField.size() + ". Definition");
+            answerLabel.setText(this.answerTextField.size() + ". Answer");
+            definitionTextField.setText(setsManager.getCardDefinition(setsManager.indexOfChosenSet, i));
+            answerTextField.setText(setsManager.getCardAnswer(setsManager.indexOfChosenSet, i));
+
+            definitionLabel.setFont(new Font(15));
+            answerLabel.setFont(new Font(15));
+            definitionTextField.setFont(new Font(17));
+            answerTextField.setFont(new Font(17));
+            VBox.setMargin(definitionLabel, new Insets(20, 0, 0, 0));
+            VBox.setMargin(answerLabel, new Insets(10, 0, 0, 0));
+
+            vBox.getChildren().add(definitionLabel);
+            vBox.getChildren().add(definitionTextField);
+            vBox.getChildren().add(answerLabel);
+            vBox.getChildren().add(answerTextField);
+        }
+    }
+
+    private Button createDeleteSetButton(){
+
+        Button deleteSetButton = new Button();
 
         deleteSetButton.setFont(new Font(20));
         deleteSetButton.setText("Delete set");
         deleteSetButton.setAlignment(Pos.CENTER);
         deleteSetButton.setMinSize(200, 60);
         VBox.setMargin(deleteSetButton, new Insets(30,0,20,0));
+
         deleteSetButton.setOnAction(actionEvent -> {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/MainMenu.fxml"));
@@ -50,7 +98,7 @@ public class EditSet {
             try {
                 scene = new Scene(fxmlLoader.load());
             } catch (IOException e) {
-                e.printStackTrace();
+                Platform.exit();
             }
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -58,13 +106,20 @@ public class EditSet {
 
             setsManager.deleteSet(setsManager.indexOfChosenSet);
         });
-        vBox.getChildren().add(deleteSetButton);
+
+        return deleteSetButton;
+    }
+
+    private Button createSaveChangesButton(){
+
+        Button saveChangesButton = new Button();
 
         saveChangesButton.setFont(new Font(20));
         saveChangesButton.setText("Save changes");
         saveChangesButton.setAlignment(Pos.CENTER);
         saveChangesButton.setMinSize(200, 60);
         VBox.setMargin(saveChangesButton, new Insets(30,0,20,0));
+
         saveChangesButton.setOnAction(actionEvent -> {
 
             boolean noEmptyFields = true;
@@ -104,62 +159,41 @@ public class EditSet {
                 try {
                     scene = new Scene(fxmlLoader.load());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Platform.exit();
                 }
                 Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
             }
         });
-        vBox.getChildren().add(saveChangesButton);
+
+        return saveChangesButton;
+    }
+
+    private Button createBackButton(){
+
+        Button backButton = new Button();
 
         backButton.setFont(new Font(20));
         backButton.setText("Back");
         backButton.setAlignment(Pos.CENTER);
         backButton.setMinSize(150, 60);
         VBox.setMargin(backButton, new Insets(30,0,20,0));
+
         backButton.setOnAction(actionEvent -> {
+
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/flashcards/scenes/main/edit/ChooseSet.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load());
             } catch (IOException e) {
-                e.printStackTrace();
+                Platform.exit();
             }
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();
         });
-        vBox.getChildren().add(backButton);
-    }
 
-    public void listCardDefinitionsAndAnswers(){
-        for(int i = 1; i <= setsManager.getNumberOfCards(setsManager.indexOfChosenSet); i++) {
-            Label definitionLabel = new Label();
-            TextField definitionTextField = new TextField();
-            Label answerLabel = new Label();
-            TextField answerTextField = new TextField();
-            this.definitionTextField.add(definitionTextField);
-            this.answerTextField.add(answerTextField);
-            definitionLabel.setPrefSize(500, 60);
-            answerLabel.setPrefSize(500, 60);
-            definitionTextField.setPrefSize(500, 60);
-            answerTextField.setPrefSize(500, 60);
-            definitionLabel.setText(this.definitionTextField.size() + ". Definition");
-            answerLabel.setText(this.answerTextField.size() + ". Answer");
-            definitionTextField.setText(setsManager.getCardDefinition(setsManager.indexOfChosenSet, i));
-            answerTextField.setText(setsManager.getCardAnswer(setsManager.indexOfChosenSet, i));
-            definitionLabel.setFont(new Font(15));
-            answerLabel.setFont(new Font(15));
-            definitionTextField.setFont(new Font(17));
-            answerTextField.setFont(new Font(17));
-            VBox.setMargin(definitionLabel, new Insets(20, 0, 0, 0));
-            VBox.setMargin(answerLabel, new Insets(10, 0, 0, 0));
-
-            vBox.getChildren().add(definitionLabel);
-            vBox.getChildren().add(definitionTextField);
-            vBox.getChildren().add(answerLabel);
-            vBox.getChildren().add(answerTextField);
-        }
+        return backButton;
     }
 }
